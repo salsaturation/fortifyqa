@@ -14,6 +14,8 @@ See `README.md` for server layout, local development, and the deploy workflow.
 - `public/.htaccess`: HTTPS/apex redirects, SPA fallback, CSP and security headers. New external origins (fonts, images, scripts) must be added to the CSP.
 - `server/config.example.php`: template for `~/fortifyqa/config.php` on the server (outside the web root).
 - `scripts/deploy.sh`: lint, build, rsync over SSH to Zume, smoke test. Settings in git-ignored `.env.deploy`.
+- `scripts/bundle.sh`: builds `release/home/` (git-ignored) for manual FileZilla uploads. Its `config.php` contains the IP salt, so don't commit or share it.
+- `scripts/smoke-test.sh [URL]`: post-deploy HTTP checks.
 
 ## Checks
 

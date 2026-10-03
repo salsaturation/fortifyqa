@@ -33,3 +33,4 @@ base44/.app.jsonc
 
 .env.deploy
 .local-server/
+release/

@@ -66,6 +66,21 @@ scripts/deploy.sh             # lint, build, upload, smoke test
 
 The script asks before deleting any remote file that isn't in `dist/` (e.g. a cPanel placeholder `index.html` or an old site). `.well-known/`, `cgi-bin/`, `.user.ini`, `php.ini` and `error_log` are never touched. On first run it creates `~/fortifyqa/config.php` with a random IP salt; later runs leave it alone, so edit it on the server if the recipient or sender changes.
 
+### Manual deploy with FileZilla
+
+```bash
+scripts/bundle.sh       # lint + build into release/home/ (mirrors your Zume home dir)
+```
+
+1. In FileZilla, connect with **SFTP**, port 22, your cPanel username and password (or SSH key). The host is your domain or the server hostname from cPanel > Server Information.
+2. Turn on **Server > Force showing hidden files** so `.htaccess` is visible on the server.
+3. Local pane: open `release/home/`. Remote pane: your home directory (the folder that contains `public_html`).
+4. **First deploy only:** drag `fortifyqa/` into the home directory. Then right-click `fortifyqa/config.php` > File permissions > `600`, and set the `fortifyqa` folder to `700`. Never put this folder inside `public_html`.
+5. Open `release/home/public_html/` locally and drag **everything inside it** (including `.htaccess` and `api/`) into the remote `public_html/`. Choose **Overwrite** when prompted. Delete any old placeholder `index.php` or `default.html` that cPanel created.
+6. Run `scripts/smoke-test.sh` and submit the Contact form once to confirm the email arrives.
+
+Re-running `scripts/bundle.sh` keeps the same `config.php` (and IP salt). After the first deploy, only `public_html/` needs re-uploading. Old `assets/index-*.js` files left behind on the server are harmless, but you can delete the ones not referenced by the new `index.html`.
+
 ## Form submissions
 
 `public/api/submit.php` accepts JSON `POST`s from the site's own origin only. It validates each form against a fixed schema (unknown fields rejected, length limits, enum checks, email/URL validation), silently drops honeypot or too-fast bot submissions, rate-limits per IP (5 per 10 min) and globally (60 per hour), appends to the CSV (spreadsheet formula injection neutralised), and emails the recipient with `Reply-To` set to the submitter. Submissions succeed if either the CSV write or the email works; failures are written to the PHP error log without personal data.

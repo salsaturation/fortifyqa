@@ -113,15 +113,5 @@ rsync "${RSYNC_OPTS[@]}" -e "$RSYNC_SSH" dist/ "$TARGET:$ZUME_WEB_ROOT/"
 
 ssh "${SSH_OPTS[@]}" -O exit "$TARGET" 2>/dev/null || true
 
-echo "==> Smoke test against $SITE_URL"
-home_status="$(curl -s -o /dev/null -w '%{http_code}' "$SITE_URL/")"
-route_status="$(curl -s -o /dev/null -w '%{http_code}' "$SITE_URL/pricing")"
-api_status="$(curl -s -o /dev/null -w '%{http_code}' "$SITE_URL/api/submit.php")"
-echo "  /                -> $home_status (want 200)"
-echo "  /pricing         -> $route_status (want 200, SPA fallback)"
-echo "  /api/submit.php  -> $api_status (want 405 for GET)"
-if [[ "$home_status" != 200 || "$route_status" != 200 || "$api_status" != 405 ]]; then
-  echo "Smoke test failed. If DNS/SSL isn't live yet, re-run the checks later." >&2
-  exit 1
-fi
+scripts/smoke-test.sh "$SITE_URL"
 echo "Deployed."
