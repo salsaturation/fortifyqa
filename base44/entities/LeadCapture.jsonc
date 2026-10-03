@@ -1,0 +1,19 @@
+{
+  "name": "LeadCapture",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    },
+    "asset": {
+      "type": "string",
+      "default": "The Persona Test Planner"
+    }
+  },
+  "required": [
+    "email"
+  ]
+}
