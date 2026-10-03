@@ -22,7 +22,7 @@ export default function About() {
       <Section>
         <div className="grid gap-12 lg:grid-cols-[1fr_1.6fr]">
           <Image
-            src="https://media.base44.com/images/public/6a7f93b3cb5dff38406b0a9e/82d4b7bc9_generated_c5676243.png"
+            src="/images/about.webp"
             alt="Abstract translucent figure rendered in low-key light"
             className="h-80 w-full border border-border object-cover"
           />

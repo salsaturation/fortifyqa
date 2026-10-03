@@ -54,7 +54,7 @@ export default function Services() {
             <SectionHead label="Security add-on" title="The attacker is a persona too." body="We run a Sentinel scan across your repo and live site, then convert the highest-risk findings into Playwright regression tests: broken access control, auth bypass, exposed endpoints. You get a prioritized remediation brief and permanent coverage." />
           </div>
           <Image
-            src="https://media.base44.com/images/public/6a7f93b3cb5dff38406b0a9e/6b47e2b98_generated_06a5d1f4.png"
+            src="/images/services.webp"
             alt="Obsidian shield of interlocking data shards with amber highlights"
             className="h-72 w-full border border-border object-cover"
           />

@@ -1,19 +1,28 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
+import { submitForm } from "@/api/forms";
 import { Download, Check, ArrowRight } from "lucide-react";
+import Honeypot from "./Honeypot";
 
 export default function LeadMagnet({ source = "home", compact = false }) {
   const [email, setEmail] = useState("");
   const [done, setDone] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const startedAt = useRef(Date.now());
 
   const submit = async (e) => {
     e.preventDefault();
     setBusy(true);
-    await base44.entities.LeadCapture.create({ email, source, asset: "The Persona Test Planner" });
-    setBusy(false);
-    setDone(true);
+    setError("");
+    try {
+      await submitForm("lead", { email, source }, e.currentTarget, startedAt.current);
+      setDone(true);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
@@ -33,10 +42,12 @@ export default function LeadMagnet({ source = "home", compact = false }) {
           </Link>
         </div>
       ) : (
-        <form onSubmit={submit} className="mt-6 flex flex-col gap-3 sm:flex-row">
+        <form onSubmit={submit} className="relative mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+          <Honeypot />
           <input
             type="email"
             required
+            maxLength={254}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@company.com"
@@ -49,6 +60,7 @@ export default function LeadMagnet({ source = "home", compact = false }) {
           >
             <Download className="h-4 w-4" /> {busy ? "Sending…" : "Get the planner"}
           </button>
+          {error && <p role="alert" className="w-full text-sm text-destructive">{error}</p>}
         </form>
       )}
     </div>

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import React, { useRef, useState } from "react";
+import { submitForm } from "@/api/forms";
 import { Check } from "lucide-react";
 import PageHero from "@/components/site/PageHero";
 import { Section } from "@/components/site/Primitives";
+import Honeypot from "@/components/site/Honeypot";
 
 const NEEDS = [
   ["A staging URL", "Anywhere we can click through your product without touching production data."],
@@ -30,15 +31,23 @@ export default function BookAudit() {
   const [form, setForm] = useState({ name: "", email: "", app_url: "", preferred_slot: SLOTS[0], riskiest_flow: "" });
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState("");
+  const startedAt = useRef(Date.now());
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
   const submit = async (e) => {
     e.preventDefault();
     setBusy(true);
-    await base44.entities.AuditRequest.create(form);
-    setBusy(false);
-    setSent(true);
+    setError("");
+    try {
+      await submitForm("audit", form, e.currentTarget, startedAt.current);
+      setSent(true);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
@@ -90,20 +99,21 @@ export default function BookAudit() {
                   </p>
                 </div>
               ) : (
-                <form onSubmit={submit} className="space-y-5">
+                <form onSubmit={submit} className="relative space-y-5">
+                  <Honeypot />
                   <div className="grid gap-5 sm:grid-cols-2">
                     <label className="block">
                       <span className="mono-label text-muted-foreground">Name</span>
-                      <input required value={form.name} onChange={set("name")} className={`mt-2 ${inputClass}`} />
+                      <input required maxLength={120} value={form.name} onChange={set("name")} className={`mt-2 ${inputClass}`} />
                     </label>
                     <label className="block">
                       <span className="mono-label text-muted-foreground">Email</span>
-                      <input required type="email" value={form.email} onChange={set("email")} className={`mt-2 ${inputClass}`} />
+                      <input required type="email" maxLength={254} value={form.email} onChange={set("email")} className={`mt-2 ${inputClass}`} />
                     </label>
                   </div>
                   <label className="block">
                     <span className="mono-label text-muted-foreground">App / staging URL</span>
-                    <input value={form.app_url} onChange={set("app_url")} placeholder="https://" className={`mt-2 ${inputClass}`} />
+                    <input type="url" maxLength={500} value={form.app_url} onChange={set("app_url")} placeholder="https://" className={`mt-2 ${inputClass}`} />
                   </label>
                   <label className="block">
                     <span className="mono-label text-muted-foreground">Preferred slot</span>
@@ -115,7 +125,7 @@ export default function BookAudit() {
                   </label>
                   <label className="block">
                     <span className="mono-label text-muted-foreground">Riskiest user flow</span>
-                    <textarea rows={3} value={form.riskiest_flow} onChange={set("riskiest_flow")} className={`mt-2 ${inputClass}`} />
+                    <textarea rows={3} maxLength={4000} value={form.riskiest_flow} onChange={set("riskiest_flow")} className={`mt-2 ${inputClass}`} />
                   </label>
                   <button
                     type="submit"
@@ -124,6 +134,7 @@ export default function BookAudit() {
                   >
                     {busy ? "Booking…" : "Request this slot"}
                   </button>
+                  {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
                 </form>
               )}
             </div>

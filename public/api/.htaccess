@@ -1,0 +1,8 @@
+Options -Indexes
+
+<FilesMatch ".*">
+  Require all denied
+</FilesMatch>
+<Files "submit.php">
+  Require all granted
+</Files>

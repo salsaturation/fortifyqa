@@ -1,77 +1,73 @@
-# Base44 Project
+# Fortify QA website
 
-Use this repository to run and edit the app locally, then publish changes back through Base44.
+Marketing site for Fortify QA. Static React (Vite + Tailwind) frontend plus one PHP endpoint for form submissions, hosted on Zume (cPanel / Apache + PHP).
 
-Any change pushed to the repo will also be reflected in the Base44 Builder.
+Originally built in Base44 (app `6a7f93b3cb5dff38406b0a9e`); this repo is the standalone copy with no Base44 runtime dependency.
 
-## Prerequisites
+## Layout on the server
 
-1. Clone the repository using the project's Git URL.
-2. Navigate to the project directory.
-3. Install dependencies: `npm install`.
-4. Install the Base44 CLI: `npm install -g base44@latest`.
+```
+~/public_html/            <- contents of dist/ (rsync'd by scripts/deploy.sh)
+  .htaccess               HTTPS + apex redirect, SPA fallback, security headers
+  api/submit.php          form endpoint (contact, audit, lead)
+~/fortifyqa/              <- private, outside the web root (chmod 700)
+  config.php              recipient, sender, allowed origins, rate limits, IP salt (chmod 600)
+  data/submissions.csv    append-only log of every accepted submission (chmod 600)
+  data/ratelimit/         per-IP / global counters (hashed keys)
+```
 
-See the [Base44 CLI docs](https://docs.base44.com/developers/references/cli/get-started/overview) if you want to run Base44 commands directly.
-
-## Run Locally
-
-Run the full local development environment from the project root:
+## Local development
 
 ```bash
-base44 dev
+npm install
+npm run dev        # frontend on http://localhost:5173
 ```
 
-`base44 dev` starts the local Base44 development backend and, when this app is configured for it, also starts the frontend dev server for you. Use the frontend URL printed by the command.
-
-For example, when the Base44 project config includes a `serveCommand`, `base44 dev` can launch the frontend too:
-
-```json5
-{
-  "site": {
-    "serveCommand": "npm run dev"
-  }
-}
-```
-
-In a Base44 project this lives in `base44/config.jsonc`.
-
-## Run Only The Frontend
-
-If you only want to work on the frontend against the hosted Base44 backend, run:
+`/api` is proxied to `http://localhost:8080` (override with `FORM_API_PROXY`). To exercise the PHP endpoint locally, run it in Docker:
 
 ```bash
-npm run dev
+npm run build
+docker run --rm -p 8080:80 -v "$PWD/dist:/var/www/html:ro" -v "$PWD/.local-server:/var/www/fortifyqa" php:8.2-apache \
+  bash -c "a2enmod rewrite headers >/dev/null && sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf && apache2-foreground"
 ```
 
-Open the local URL printed by Vite.
+Put a `config.php` (copied from `server/config.example.php`, with your local origin in `allowed_origins`) in `.local-server/`, and send `X-Forwarded-Proto: https` or the `.htaccess` will redirect you to HTTPS.
 
-## Use The Hosted Backend
-
-For frontend-only development, create or update `.env.local` in the project root:
+## Checks
 
 ```bash
-VITE_BASE44_APP_ID=your_app_id
-VITE_BASE44_APP_BASE_URL=https://your-app.base44.app
+npm run lint
+npm run build
 ```
 
-`VITE_BASE44_APP_ID` identifies the Base44 app.
+## Deploying to Zume
 
-`VITE_BASE44_APP_BASE_URL` tells the Base44 Vite plugin where to send local `/api` requests. Point it at your deployed Base44 app URL when you want the local frontend to use the hosted backend.
+One-time setup:
 
-When you use `base44 dev`, the command injects the local Base44 values for you, so `.env.local` is mainly needed for frontend-only workflows.
+1. In the Zume client area, add `fortifyqa.com` to the hosting plan and point DNS at Zume (nameservers `ns1.zumedns.com` / `ns2.zumedns.com`). SSL is issued automatically.
+2. In cPanel > Email Accounts, create `website@fortifyqa.com` (the sender) and make sure `hello@fortifyqa.com` exists (the recipient). Check that SPF/DKIM are enabled under Email Deliverability.
+3. Add your SSH public key in cPanel > SSH Access > Manage SSH Keys and authorise it.
+4. Create `.env.deploy` in the repo root (git-ignored):
 
-## Publish Your Changes
+   ```bash
+   ZUME_HOST=your-server.zume.net   # cPanel > Server Information
+   ZUME_USER=your-cpanel-username
+   # ZUME_PORT=22
+   # ZUME_WEB_ROOT=public_html
+   # ZUME_APP_DIR=fortifyqa
+   ```
 
-After pushing your changes to git, open the Base44 dashboard and publish the app:
+Every deploy:
 
 ```bash
-base44 dashboard open
+scripts/deploy.sh --dry-run   # preview what changes on the server
+scripts/deploy.sh             # lint, build, upload, smoke test
 ```
 
-## Docs & Support
+The script asks before deleting any remote file that isn't in `dist/` (e.g. a cPanel placeholder `index.html` or an old site). `.well-known/`, `cgi-bin/`, `.user.ini`, `php.ini` and `error_log` are never touched. On first run it creates `~/fortifyqa/config.php` with a random IP salt; later runs leave it alone, so edit it on the server if the recipient or sender changes.
 
-Documentation: [https://docs.base44.com/Integrations/Using-GitHub](https://docs.base44.com/Integrations/Using-GitHub)
+## Form submissions
 
-Base44 CLI command reference: [https://docs.base44.com/developers/references/cli/commands/introduction](https://docs.base44.com/developers/references/cli/commands/introduction)
+`public/api/submit.php` accepts JSON `POST`s from the site's own origin only. It validates each form against a fixed schema (unknown fields rejected, length limits, enum checks, email/URL validation), silently drops honeypot or too-fast bot submissions, rate-limits per IP (5 per 10 min) and globally (60 per hour), appends to the CSV (spreadsheet formula injection neutralised), and emails the recipient with `Reply-To` set to the submitter. Submissions succeed if either the CSV write or the email works; failures are written to the PHP error log without personal data.
 
-Support: [https://app.base44.com/support](https://app.base44.com/support)
+To read submissions: cPanel File Manager > `fortifyqa/data/submissions.csv`, or `scp` it down.

@@ -51,7 +51,7 @@ export default function Home() {
           <div className="space-y-4">
             <PersonaNodeMap />
             <Image
-              src="https://media.base44.com/images/public/6a7f93b3cb5dff38406b0a9e/4eca4ffe6_generated_da433b25.png"
+              src="/images/circuit-board.webp"
               alt="Translucent circuit board with green light pulses"
               className="h-40 w-full border border-border object-cover"
             />
@@ -125,7 +125,7 @@ export default function Home() {
             </Link>
           </div>
           <Image
-            src="https://media.base44.com/images/public/6a7f93b3cb5dff38406b0a9e/d33d79e58_generated_e94ed149.png"
+            src="/images/journey-network.webp"
             alt="Network of luminous nodes representing mapped user journeys"
             className="h-72 w-full border border-border object-cover"
           />

@@ -2,33 +2,21 @@
 
 ## Project Context
 
-This is a Base44 app repository. Treat it as user-owned application code, keep changes focused on the user's request, and preserve existing project conventions.
+Fortify QA marketing site. Standalone Vite + React + Tailwind frontend with a single PHP form endpoint, deployed to Zume (cPanel shared hosting, Apache + PHP). Originally exported from Base44 app `6a7f93b3cb5dff38406b0a9e`; the Base44 SDK, Vite plugin, and auth pages have been removed. Do not reintroduce them.
 
-Start with `README.md` for local setup, environment variables, and publish workflow.
-
-## Base44 References
-
-- CLI overview: https://docs.base44.com/developers/references/cli/get-started/overview.md
-- Agent skills: https://docs.base44.com/developers/backend/overview/skills.md
-
-If your agent supports Agent Skills, install or update Base44 skills before Base44-specific work:
-
-```bash
-npx skills add base44/skills
-```
+See `README.md` for server layout, local development, and the deploy workflow.
 
 ## Key Files
 
-- `src/`: frontend application source.
-- `src/api/base44Client.js`: frontend Base44 SDK client.
-- `vite.config.js`: Vite config and Base44 Vite plugin setup.
-- `.env.local`: local-only environment values; never commit secrets.
+- `src/`: frontend source. `@/` aliases `src/` (configured in `vite.config.js`).
+- `src/api/forms.js`: client helper that posts forms to `/api/submit.php`.
+- `public/api/submit.php`: form endpoint (validation, rate limit, CSV log, email). Field schemas must match the form fields/options in `src/pages/Contact.jsx`, `src/pages/BookAudit.jsx`, and `src/components/site/LeadMagnet.jsx`.
+- `public/.htaccess`: HTTPS/apex redirects, SPA fallback, CSP and security headers. New external origins (fonts, images, scripts) must be added to the CSP.
+- `server/config.example.php`: template for `~/fortifyqa/config.php` on the server (outside the web root).
+- `scripts/deploy.sh`: lint, build, rsync over SSH to Zume, smoke test. Settings in git-ignored `.env.deploy`.
 
-## Working Notes
+## Checks
 
-- Use `base44 dev` as the default local development command when you need the local Base44 backend. It can run the backend and frontend together.
-- When docs or code mention the frontend being started automatically, that usually means the Base44 project config includes `site.serveCommand`, for example `"serveCommand": "npm run dev"` in `base44/config.jsonc`.
-- Use `npm run dev` only for frontend-only work against the hosted Base44 backend.
-- Prefer the existing Base44 CLI workflow over adding new npm scripts for Base44-specific tasks.
-- Reuse the existing SDK client and Vite plugin patterns before adding new Base44 integration paths.
-- Run the relevant checks from `package.json` before finishing code changes.
+- `npm run lint`
+- `npm run build`
+- Endpoint tests: run `dist/` in `php:8.2-apache` Docker (see README) and exercise `/api/submit.php` with curl.

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Section, SectionHead, MonoTag } from "@/components/site/Primitives";
+import { Section, SectionHead } from "@/components/site/Primitives";
 import SentinelBadge from "@/components/site/SentinelBadge";
 import { Check, X, Clock, Filter } from "lucide-react";
 
