@@ -3,7 +3,7 @@
 // deploy.sh creates it from this template on first deploy and never overwrites it.
 return [
     'notify_to' => 'hello@fortifyqa.com',
-    'mail_from' => 'website@fortifyqa.com',
+    'mail_from' => 'hello@fortifyqa.com',
     'allowed_origins' => ['https://fortifyqa.com', 'https://www.fortifyqa.com'],
     'data_dir' => __DIR__ . '/data',
     'ip_salt' => '__IP_SALT__',

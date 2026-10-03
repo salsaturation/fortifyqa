@@ -45,7 +45,7 @@ npm run build
 One-time setup:
 
 1. In the Zume client area, add `fortifyqa.com` to the hosting plan and point DNS at Zume (nameservers `ns1.zumedns.com` / `ns2.zumedns.com`). SSL is issued automatically.
-2. In cPanel > Email Accounts, create `website@fortifyqa.com` (the sender) and make sure `hello@fortifyqa.com` exists (the recipient). Check that SPF/DKIM are enabled under Email Deliverability.
+2. Make sure `hello@fortifyqa.com` exists in cPanel > Email Accounts (it is both sender and recipient of form notifications), and that SPF/DKIM are valid under Email Deliverability.
 3. Add your SSH public key in cPanel > SSH Access > Manage SSH Keys and authorise it.
 4. Create `.env.deploy` in the repo root (git-ignored):
 
@@ -76,7 +76,7 @@ scripts/bundle.sh       # lint + build into release/home/ (mirrors your Zume hom
 2. Turn on **Server > Force showing hidden files** so `.htaccess` is visible on the server.
 3. Local pane: open `release/home/`. Remote pane: your home directory (the folder that contains `public_html`).
 4. **First deploy only:** drag `fortifyqa/` into the home directory. Then right-click `fortifyqa/config.php` > File permissions > `600`, and set the `fortifyqa` folder to `700`. Never put this folder inside `public_html`.
-5. Open `release/home/public_html/` locally and drag **everything inside it** (including `.htaccess` and `api/`) into the remote `public_html/`. Choose **Overwrite** when prompted. Delete any old placeholder `index.php` or `default.html` that cPanel created.
+5. Open `release/home/public_html/` locally and drag **everything inside it** (including `.htaccess` and `api/`) into the domain's document root (cPanel > Domains shows it; for an addon domain it is usually `~/fortifyqa.com/`, not `~/public_html/`). Choose **Overwrite** when prompted. Delete any old placeholder `index.php` or `default.html` that cPanel created.
 6. Run `scripts/smoke-test.sh` and submit the Contact form once to confirm the email arrives.
 
 Re-running `scripts/bundle.sh` keeps the same `config.php` (and IP salt). After the first deploy, only `public_html/` needs re-uploading. Old `assets/index-*.js` files left behind on the server are harmless, but you can delete the ones not referenced by the new `index.html`.

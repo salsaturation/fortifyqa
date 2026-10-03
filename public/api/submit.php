@@ -193,7 +193,20 @@ function send_notification(array $config, string $subject, array $fields, string
     );
 }
 
-$configPath = getenv('FORTIFYQA_CONFIG') ?: dirname(__DIR__, 2) . '/fortifyqa/config.php';
+/** Finds ~/fortifyqa/config.php from the account home, whatever the domain's document root is. */
+function config_path(): string
+{
+    $override = getenv('FORTIFYQA_CONFIG');
+    if ($override) {
+        return $override;
+    }
+    if (preg_match('#^(/home\d*/[^/]+)/#', __DIR__, $m) === 1) {
+        return $m[1] . '/fortifyqa/config.php';
+    }
+    return dirname(__DIR__, 2) . '/fortifyqa/config.php';
+}
+
+$configPath = config_path();
 if (!is_file($configPath)) {
     error_log('fortifyqa: config file missing');
     fail(500);
