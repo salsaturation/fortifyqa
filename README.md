@@ -2,6 +2,8 @@
 
 Marketing site for Fortify QA. Static React (Vite + Tailwind) frontend plus one PHP endpoint for form submissions, hosted on Zume (cPanel / Apache + PHP).
 
+Repo: https://github.com/salsaturation/fortifyqa (private).
+
 Originally built in Base44 (app `6a7f93b3cb5dff38406b0a9e`); this repo is the standalone copy with no Base44 runtime dependency.
 
 ## Layout on the server
