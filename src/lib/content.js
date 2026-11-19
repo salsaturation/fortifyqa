@@ -61,38 +61,9 @@ export const STEPS = [
   { id: "05", title: "Handover", body: "You get the repo, the docs, and a walkthrough. The suite is yours to run." },
 ];
 
-export const CASE_STUDIES = [
-  {
-    slug: "saas-billing-platform",
-    name: "SaaS Billing Platform",
-    metric: "3 days → 15 minutes",
-    metricLabel: "Regression cycle",
-    problem: "Manual checkout regression took 2 days every sprint, and releases slipped because of it.",
-    solution: "Playwright persona suite for buyer, admin, and refund-user flows, wired into GitHub Actions.",
-    results: "Regression time reduced to 15 minutes; caught 2 checkout bugs before release.",
-    personas: ["Buyer", "Admin", "Refund user"],
-  },
-  {
-    slug: "healthcare-booking-app",
-    name: "Healthcare Booking App",
-    metric: "3 auth fixes",
-    metricLabel: "Vulnerabilities closed",
-    problem: "No accessibility or security coverage before a compliance audit with a hard deadline.",
-    solution: "Screen-reader persona tests plus the Sentinel security bundle and attacker-persona regressions.",
-    results: "Passed the accessibility audit first time; fixed 3 auth vulnerabilities pre-audit.",
-    personas: ["Patient", "Clinician", "Screen-reader user", "Attacker"],
-  },
-  {
-    slug: "ecommerce-marketplace",
-    name: "E-commerce Marketplace",
-    metric: "-40% churn",
-    metricLabel: "From upload errors",
-    problem: "Sellers kept hitting broken bulk-upload flows that no test ever touched.",
-    solution: "Power-user persona tests for bulk actions and edge-case file uploads across browsers.",
-    results: "Seller churn caused by upload errors dropped 40% in one quarter.",
-    personas: ["Power seller", "New seller", "Support agent"],
-  },
-];
+// Real, client-approved engagements only. Shape:
+// { slug, name, metric, metricLabel, problem, solution, results, personas: [] }
+export const CASE_STUDIES = [];
 
 export const POSTS = [
   { slug: "five-personas", title: "The 5 Personas Every SaaS Should Test Before Launch", tag: "Personas", read: "7 min", excerpt: "Most teams test the happy path of one user. Here are the five personas that actually generate revenue — and the flows each one breaks." },

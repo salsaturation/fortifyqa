@@ -12,6 +12,7 @@
 #   ZUME_WEB_ROOT  web root, relative to the home directory   default public_html
 #   ZUME_APP_DIR   private dir for config + data, relative    default fortifyqa
 #   SITE_URL       public URL used for the smoke test         default https://fortifyqa.com
+#   SSH_KEY        path to SSH private key                    optional (uses ssh default)
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
@@ -22,7 +23,7 @@ for arg in "$@"; do
   case "$arg" in
     --dry-run) DRY_RUN=1 ;;
     --yes) ASSUME_YES=1 ;;
-    -h|--help) sed -n '2,15p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,16p' "$0"; exit 0 ;;
     *) echo "Unknown option: $arg" >&2; exit 2 ;;
   esac
 done
@@ -57,6 +58,11 @@ TARGET="$ZUME_USER@$ZUME_HOST"
 mkdir -p "$HOME/.ssh" && chmod 700 "$HOME/.ssh"
 CONTROL_PATH="$HOME/.ssh/cm-fortifyqa-%r@%h:%p"
 SSH_OPTS=(-p "$ZUME_PORT" -o StrictHostKeyChecking=accept-new -o ControlMaster=auto -o "ControlPath=$CONTROL_PATH" -o ControlPersist=120)
+if [[ -n "${SSH_KEY:-}" ]]; then
+  SSH_KEY="${SSH_KEY/#\~/$HOME}"
+  [[ -f "$SSH_KEY" ]] || { echo "SSH_KEY not found: $SSH_KEY" >&2; exit 2; }
+  SSH_OPTS+=(-i "$SSH_KEY" -o IdentitiesOnly=yes)
+fi
 RSYNC_SSH="ssh ${SSH_OPTS[*]}"
 RSYNC_OPTS=(-rlz --checksum --delete --chmod=D755,F644
   --exclude=.well-known/ --exclude=cgi-bin/ --exclude=.user.ini --exclude=php.ini --exclude=error_log)
@@ -106,6 +112,7 @@ if [[ ! -f "$app/config.php" ]]; then
 else
   echo "Keeping existing ~/$app/config.php"
 fi
+chmod 600 "$app/config.php"
 REMOTE
 
 echo "==> Uploading site to ~/$ZUME_WEB_ROOT"

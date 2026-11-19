@@ -1,12 +1,9 @@
 import React from "react";
 import { Section, MonoTag } from "@/components/site/Primitives";
+import FoundingNote from "@/components/site/FoundingNote";
 
-const METRICS = [
-  { value: "98%", label: "Test coverage", detail: "On critical revenue flows after suite delivery" },
-  { value: "3 days → 15 min", label: "Regression cycle", detail: "Manual checklist replaced with a CI pipeline" },
-  { value: "-40%", label: "Seller churn", detail: "From broken bulk-upload flows now under test" },
-  { value: "0", label: "Recurring auth bugs", detail: "Attacker-persona tests lock fixes in place" },
-];
+// Before/after numbers from real engagements only. Shape: { value, label, detail }
+const METRICS = [];
 
 export default function MetricsSection() {
   return (
@@ -18,11 +15,14 @@ export default function MetricsSection() {
             Outcomes, not effort reports.
           </h2>
         </div>
-        <p className="mono-label max-w-xs text-muted-foreground">
-          Representative results from shipped engagements
-        </p>
       </div>
 
+      {METRICS.length === 0 ? (
+        <FoundingNote className="mt-14">
+          Every engagement ends with before-and-after numbers: how long regression took, how long it takes now,
+          and what the suite caught before release. We'll publish them here as our first clients' projects finish.
+        </FoundingNote>
+      ) : (
       <div className="mt-14 grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
         {METRICS.map((m) => (
           <div key={m.label} className="bg-card/60 p-8">
@@ -32,6 +32,7 @@ export default function MetricsSection() {
           </div>
         ))}
       </div>
+      )}
     </Section>
   );
 }

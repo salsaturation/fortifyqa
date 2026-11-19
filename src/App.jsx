@@ -15,6 +15,7 @@ import About from '@/pages/About';
 import Contact from '@/pages/Contact';
 import BookAudit from '@/pages/BookAudit';
 import PersonaTestPlanner from '@/pages/PersonaTestPlanner';
+import Privacy from '@/pages/Privacy';
 
 function App() {
 
@@ -34,6 +35,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/book-audit" element={<BookAudit />} />
             <Route path="/persona-test-planner" element={<PersonaTestPlanner />} />
+            <Route path="/privacy" element={<Privacy />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
         </Routes>

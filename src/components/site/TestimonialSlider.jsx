@@ -1,33 +1,29 @@
 import React, { useState } from "react";
 import { Section, MonoTag } from "@/components/site/Primitives";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import FoundingNote from "@/components/site/FoundingNote";
 
-const QUOTES = [
-  {
-    quote:
-      "We went from dreading release day to pushing twice a week. The persona suite catches the checkout breaks that used to land in customer support.",
-    name: "Founder, SaaS Billing Platform",
-    metric: "Regression: 3 days → 15 min",
-  },
-  {
-    quote:
-      "Our shipping speed doubled because we stopped manually re-testing the admin and refund flows. The CI gate means a red build never reaches production.",
-    name: "CTO, Marketplace Team",
-    metric: "Deploys: weekly → twice weekly",
-  },
-  {
-    quote:
-      "The attacker-persona tests found three auth gaps before our compliance audit. We passed first time and the fixes can't regress — they're in the suite.",
-    name: "Founder, Healthcare Booking App",
-    metric: "3 auth vulnerabilities closed",
-  },
-];
+// Real, attributed quotes only, with the client's permission. Shape: { quote, name, metric }
+const QUOTES = [];
 
 export default function TestimonialSlider() {
   const [i, setI] = useState(0);
   const count = QUOTES.length;
   const go = (n) => setI((p) => (n + count) % count);
   const active = QUOTES[i];
+
+  if (count === 0) {
+    return (
+      <Section className="border-border/70 bg-card/20">
+        <MonoTag tone="green">Testimonials</MonoTag>
+        <h2 className="mt-5 text-3xl font-semibold leading-tight md:text-5xl">Your quote could go here.</h2>
+        <FoundingNote className="mt-12">
+          We're a new studio working with our first clients now. Founding clients get our full attention and help
+          shape how the packages work. Their words will go here, with permission.
+        </FoundingNote>
+      </Section>
+    );
+  }
 
   return (
     <Section className="border-border/70 bg-card/20">

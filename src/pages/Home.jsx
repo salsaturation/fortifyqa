@@ -44,7 +44,7 @@ export default function Home() {
               <SecondaryCTA to="/process">See how it works</SecondaryCTA>
             </div>
             <p className="mono-label mt-10 text-muted-foreground">
-              Trusted by early-stage SaaS teams shipping with confidence
+              Fixed scope · Fixed price · Runs in your CI
             </p>
           </div>
 
@@ -116,13 +116,28 @@ export default function Home() {
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <div>
             <MonoTag>Case study</MonoTag>
-            <h2 className="mt-5 text-3xl font-semibold md:text-4xl">{featured.name}</h2>
-            <p className="mt-6 font-mono text-4xl text-primary">{featured.metric}</p>
-            <p className="mono-label mt-2 text-muted-foreground">{featured.metricLabel}</p>
-            <p className="mt-6 max-w-lg text-muted-foreground">{featured.outcome}</p>
-            <Link to="/case-studies" className="mono-label mt-8 inline-flex items-center gap-2 text-primary">
-              Read the case study <ArrowRight className="h-3 w-3" />
-            </Link>
+            {featured ? (
+              <>
+                <h2 className="mt-5 text-3xl font-semibold md:text-4xl">{featured.name}</h2>
+                <p className="mt-6 font-mono text-4xl text-primary">{featured.metric}</p>
+                <p className="mono-label mt-2 text-muted-foreground">{featured.metricLabel}</p>
+                <p className="mt-6 max-w-lg text-muted-foreground">{featured.results}</p>
+                <Link to="/case-studies" className="mono-label mt-8 inline-flex items-center gap-2 text-primary">
+                  Read the case study <ArrowRight className="h-3 w-3" />
+                </Link>
+              </>
+            ) : (
+              <>
+                <h2 className="mt-5 text-3xl font-semibold md:text-4xl">Your app could be the first.</h2>
+                <p className="mt-6 max-w-lg text-muted-foreground">
+                  Each engagement ends with an after-action report: the flows we covered, what the suite caught and
+                  how long regression takes now. We'll publish our first ones here, with our clients' permission.
+                </p>
+                <Link to="/book-audit" className="mono-label mt-8 inline-flex items-center gap-2 text-primary">
+                  Become a founding client <ArrowRight className="h-3 w-3" />
+                </Link>
+              </>
+            )}
           </div>
           <Image
             src="/images/journey-network.webp"

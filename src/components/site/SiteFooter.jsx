@@ -71,7 +71,7 @@ export default function SiteFooter() {
       </div>
 
       <div className="mx-auto mt-14 flex w-full max-w-6xl flex-col gap-2 border-t border-border/70 pt-6 md:flex-row md:items-center md:justify-between">
-        <p className="mono-label text-muted-foreground">© {new Date().getFullYear()} Fortify QA</p>
+        <p className="mono-label text-muted-foreground">© {new Date().getFullYear()} Fortify QA · <Link to="/privacy" className="transition-colors hover:text-primary">Privacy</Link></p>
         <p className="mono-label text-muted-foreground">Playwright · GitHub Actions · Rafter</p>
       </div>
     </footer>

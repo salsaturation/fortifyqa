@@ -7,7 +7,7 @@ Originally built in Base44 (app `6a7f93b3cb5dff38406b0a9e`); this repo is the st
 ## Layout on the server
 
 ```
-~/public_html/            <- contents of dist/ (rsync'd by scripts/deploy.sh)
+~/fortifyqa.com/          <- contents of dist/ (rsync'd by scripts/deploy.sh)
   .htaccess               HTTPS + apex redirect, SPA fallback, security headers
   api/submit.php          form endpoint (contact, audit, lead)
 ~/fortifyqa/              <- private, outside the web root (chmod 700)
@@ -50,11 +50,12 @@ One-time setup:
 4. Create `.env.deploy` in the repo root (git-ignored):
 
    ```bash
-   ZUME_HOST=your-server.zume.net   # cPanel > Server Information
-   ZUME_USER=your-cpanel-username
+   ZUME_HOST=ftp.rogues.run
+   ZUME_USER=roguesru
+   ZUME_WEB_ROOT=fortifyqa.com        # addon domain doc root, not public_html
+   ZUME_APP_DIR=fortifyqa
+   SSH_KEY=~/.ssh/deckgigs_deploy_ed25519
    # ZUME_PORT=22
-   # ZUME_WEB_ROOT=public_html
-   # ZUME_APP_DIR=fortifyqa
    ```
 
 Every deploy:

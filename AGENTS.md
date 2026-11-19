@@ -22,3 +22,8 @@ See `README.md` for server layout, local development, and the deploy workflow.
 - `npm run lint`
 - `npm run build`
 - Endpoint tests: run `dist/` in `php:8.2-apache` Docker (see README) and exercise `/api/submit.php` with curl.
+
+## Content rules
+
+- Client proof (logos in `TrustedBy.jsx`, `METRICS`, `QUOTES`, `CASE_STUDIES`) must be real and approved by the client. The lists are empty until then and the sections show a founding-client note instead. Don't add invented or "representative" examples.
+- Each route needs an entry in `src/components/site/PageMeta.jsx` (title, description, canonical) and in `public/sitemap.xml`.
