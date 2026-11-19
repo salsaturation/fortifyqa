@@ -1,3 +1,20 @@
+// Entry-level security check, shown on its own above the main packages.
+export const BREACH_CHECK = {
+  slug: "breach-check",
+  name: "Breach Check",
+  price: "£395",
+  meta: "Report in 2 business days",
+  summary: "Find out what your app is leaking before someone else does. Built for apps made quickly with AI tools.",
+  includes: [
+    "Automated scan of your repo and live site",
+    "Hands-on check of the 10 leaks AI-built apps ship with most",
+    "Plain-English report, ranked by risk, with the fix for each",
+    "30-minute walkthrough call",
+    "Free re-check within 30 days of the report",
+  ],
+  note: "We only test apps you own or are authorised to test, under a signed scope agreed before we start.",
+};
+
 export const PACKAGES = [
   {
     slug: "persona-test-map",
@@ -54,7 +71,7 @@ export const RETAINER = {
 };
 
 export const STEPS = [
-  { id: "01", title: "Discovery", body: "You share your app, your users, and your biggest fear. We define personas and critical flows." },
+  { id: "01", title: "Discovery", body: "You share your app, your users, and your biggest fear. We define personas and critical flows, and agree a signed scope and written permission to test." },
   { id: "02", title: "Test Design", body: "We write the test plan and agree on scope and price before a line of code is written." },
   { id: "03", title: "Automation", body: "We build the Playwright suite, fixtures, and the CI pipeline that runs it on every push." },
   { id: "04", title: "Security Layer", body: "Optional Sentinel scan becomes attacker-persona tests that prevent the same gap returning." },
@@ -65,15 +82,28 @@ export const STEPS = [
 // { slug, name, metric, metricLabel, problem, solution, results, personas: [] }
 export const CASE_STUDIES = [];
 
+// Blog posts. Bodies are Markdown files in src/posts/, loaded by slug.
 export const POSTS = [
-  { slug: "five-personas", title: "The 5 Personas Every SaaS Should Test Before Launch", tag: "Personas", read: "7 min", excerpt: "Most teams test the happy path of one user. Here are the five personas that actually generate revenue — and the flows each one breaks." },
-  { slug: "structure-by-persona", title: "How to Structure Playwright Tests by User Persona", tag: "Playwright", read: "9 min", excerpt: "Fixtures per persona, role-based locators, and a folder layout that still makes sense after 400 tests." },
-  { slug: "attacker-persona", title: "Adding a Security Attacker Persona to Your Playwright Suite", tag: "Security", read: "8 min", excerpt: "Turn scan findings into permanent regression tests: IDOR, broken auth, and mass assignment, in Playwright." },
-  { slug: "sentinel-review", title: "Sentinel Review: Affordable Security Scanning for Indie Teams", tag: "Tooling", read: "6 min", excerpt: "What a repo-plus-live-site scan actually catches, what it misses, and where a human still has to look." },
-  { slug: "manual-to-ci", title: "From Manual Regression to CI in 10 Days", tag: "Process", read: "10 min", excerpt: "A day-by-day account of replacing a two-day manual checklist with a 15-minute pipeline." },
+  {
+    slug: "ai-built-app-leaks",
+    title: "10 ways AI-built apps leak user data, and how to check yours in an hour",
+    tag: "Security",
+    read: "9 min",
+    date: "2026-11-19",
+    excerpt: "Apps built fast with AI tools keep shipping with the same holes: keys in the browser, database rules switched off, and users who can read each other's data. Here's how to check yours.",
+  },
+  {
+    slug: "breach-check-sample-report",
+    title: "What a Breach Check looks like: a sample report",
+    tag: "Process",
+    read: "6 min",
+    date: "2026-11-19",
+    excerpt: "A walk through the report you get from a Breach Check, using a made-up app: how findings are ranked, what a fix looks like, and the test that stops it coming back.",
+  },
 ];
 
 export const FAQS = [
+  { q: "Is it legal for you to test my app?", a: "Yes, with your written permission. Before any test we agree a signed scope: which app, which environments, which accounts and what's off limits. We only test apps you own or are authorised to have tested, and we never test third-party services your app relies on without their permission." },
   { q: "What happens when a test breaks?", a: "A red build blocks the merge, not the release. Each failure includes a Playwright trace — a step-by-step replay of what the test saw — so an engineer can reproduce it in minutes. If the product changed intentionally, we update the test; if it's a real regression, you fix the code before it ships." },
   { q: "How do you keep tests from going flaky?", a: "Web-first assertions auto-wait for the DOM to settle, so there are no sleep() calls. Role-based locators target what users actually see, so a class rename doesn't break the suite. And every test runs in CI across Chromium, Firefox, and WebKit with retries — a genuine flake surfaces and gets fixed, not ignored." },
   { q: "Who maintains the suite after handover?", a: "You can. The repo, fixtures, and docs are yours and structured to be readable after 400 tests. Most teams add the retainer so the suite keeps pace with new features and someone else owns the flaky tests — but there is no lock-in." },

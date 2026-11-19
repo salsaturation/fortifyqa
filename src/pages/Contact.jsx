@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { submitForm } from "@/api/forms";
 import { Check, Mail } from "lucide-react";
 import PageHero from "@/components/site/PageHero";
@@ -7,19 +7,29 @@ import { Section } from "@/components/site/Primitives";
 import LeadMagnet from "@/components/site/LeadMagnet";
 import Honeypot from "@/components/site/Honeypot";
 
-const PACKAGE_OPTIONS = ["Not sure", "Persona Test Map", "Playwright Suite", "Security Bundle", "Retainer"];
+const PACKAGE_OPTIONS = ["Not sure", "Breach Check", "Persona Test Map", "Playwright Suite", "Security Bundle", "Retainer"];
+
+// ?package=<slug> links (e.g. from the Breach Check card) preselect the package.
+const PACKAGE_FROM_SLUG = {
+  "breach-check": "Breach Check",
+  "persona-test-map": "Persona Test Map",
+  "playwright-persona-suite": "Playwright Suite",
+  "security-regression-bundle": "Security Bundle",
+  retainer: "Retainer",
+};
 
 const inputClass =
   "w-full border border-border bg-background px-4 py-3 text-sm outline-none focus:border-primary";
 
 export default function Contact() {
+  const [params] = useSearchParams();
   const [form, setForm] = useState({
     name: "",
     email: "",
     company: "",
     tech_stack: "",
     worry: "",
-    package_interest: "Not sure",
+    package_interest: PACKAGE_FROM_SLUG[params.get("package")] || "Not sure",
   });
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);

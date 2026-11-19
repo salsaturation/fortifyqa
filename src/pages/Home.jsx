@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Timer, TestTube2, ShieldAlert, ArrowRight } from "lucide-react";
+import BreachCheckCard from "@/components/site/BreachCheckCard";
 import { Image } from "@/components/ui/image";
 import { Section, SectionHead, MonoTag } from "@/components/site/Primitives";
 import { PrimaryCTA, SecondaryCTA } from "@/components/site/CTAButtons";
@@ -15,9 +16,9 @@ import FinalCTA from "@/components/site/FinalCTA";
 import { PACKAGES, STEPS, CASE_STUDIES } from "@/lib/content";
 
 const PROBLEMS = [
-  { icon: Timer, title: "Slow releases?", body: "Manual regression is the bottleneck. We automate the journeys that actually earn revenue so a release check takes minutes." },
-  { icon: TestTube2, title: "No test coverage?", body: "Get a maintainable Playwright suite — fixtures, role-based locators, web-first assertions — running in CI within days." },
-  { icon: ShieldAlert, title: "Worried about security?", body: "Add a Rafter-powered scan and turn each finding into an attacker-persona test that stops it coming back.", amber: true },
+  { icon: ShieldAlert, title: "Built it with AI tools?", body: "Keys left in the browser code, database rules switched off, users who can open each other's records by changing a number in the URL. AI-built apps ship with the same holes again and again.", amber: true },
+  { icon: TestTube2, title: "Fixed it once, broke it again?", body: "The next AI-generated change can quietly undo a security fix. We turn each fix into a Playwright test that fails the build if the hole comes back." },
+  { icon: Timer, title: "Release day is a gamble?", body: "Manual checks are the bottleneck. We automate the journeys that earn revenue, so checking a release takes minutes, not days." },
 ];
 
 export default function Home() {
@@ -31,17 +32,17 @@ export default function Home() {
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background" />
         <div className="relative mx-auto grid w-full max-w-6xl items-center gap-16 lg:grid-cols-2">
           <div>
-            <MonoTag tone="green">Playwright automation studio</MonoTag>
+            <MonoTag tone="green">Security checks for AI-built apps</MonoTag>
             <h1 className="mt-6 text-4xl font-semibold leading-[1.05] md:text-6xl">
-              Ship fewer bugs.<br />Sleep better at night.
+              Built it fast with AI?<br />Find out what it's leaking.
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-              Persona-driven Playwright test automation for early-stage SaaS teams. We turn your real users into
-              reliable regression suites — and catch security gaps before your customers do.
+              We check your app for the holes AI-built apps keep shipping with, help you fix them, and lock each fix in
+              with a Playwright test that runs on every deploy. Before someone else finds them.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
-              <PrimaryCTA />
-              <SecondaryCTA to="/process">See how it works</SecondaryCTA>
+              <PrimaryCTA to="/contact?package=breach-check">Book a Breach Check</PrimaryCTA>
+              <SecondaryCTA to="/blog/ai-built-app-leaks">Check your own app</SecondaryCTA>
             </div>
             <p className="mono-label mt-10 text-muted-foreground">
               Fixed scope · Fixed price · Runs in your CI
@@ -62,7 +63,7 @@ export default function Home() {
       <Section>
         <SectionHead
           label="The problem"
-          title="You already know what's fragile. Nothing is testing it."
+          title="Shipping fast is easy now. Shipping safely isn't."
         />
         <div className="mt-14 grid gap-px border border-border bg-border md:grid-cols-3">
           {PROBLEMS.map(({ icon: Icon, title, body, amber }) => (
@@ -76,19 +77,19 @@ export default function Home() {
       </Section>
 
       <Section>
-        <SectionHead label="How it works" title="Map. Automate. Protect." />
+        <SectionHead label="How it works" title="Check. Fix. Lock it in." />
         <div className="mt-14 grid gap-10 md:grid-cols-3">
           {STEPS.filter((s) => ["01", "03", "04"].includes(s.id)).map((s, i) => (
             <div key={s.id} className="border-t border-border pt-6">
               <p className="mono-label text-primary">Step 0{i + 1}</p>
               <h3 className="mt-4 text-xl font-semibold">
-                {["Map", "Automate", "Protect"][i]}
+                {["Check", "Fix", "Lock it in"][i]}
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                 {[
-                  "We interview you and define the 3–5 user personas that drive revenue.",
-                  "We write Playwright suites for each persona and wire them into GitHub Actions.",
-                  "An optional Rafter security scan becomes attacker-persona tests that prevent regressions.",
+                  "We scan your code and live site, then test it by hand the way an attacker would: other users' data, admin pages, keys, uploads, AI features.",
+                  "You get a plain-English report ranked by risk, with the fix for each finding. We can make the fixes with you or for you.",
+                  "Each fix becomes a Playwright test in your CI, so the next change, human or AI, can't quietly reopen it.",
                 ][i]}
               </p>
             </div>
@@ -103,7 +104,8 @@ export default function Home() {
             Full pricing <ArrowRight className="h-3 w-3" />
           </Link>
         </div>
-        <div className="mt-14 grid gap-6 md:grid-cols-3">
+        <BreachCheckCard className="mt-14" />
+        <div className="mt-6 grid gap-6 md:grid-cols-3">
           {PACKAGES.map((p) => (
             <PackageCard key={p.slug} pkg={p} ctaLabel="See details" ctaTo="/pricing" />
           ))}

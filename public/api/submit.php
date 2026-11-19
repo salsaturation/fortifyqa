@@ -10,7 +10,7 @@ const MAX_BODY_BYTES = 16384;
 const MIN_FILL_MS = 2500;
 const GENERIC_ERROR = 'Something went wrong. Please try again or email hello@fortifyqa.com.';
 
-const PACKAGE_OPTIONS = ['Not sure', 'Persona Test Map', 'Playwright Suite', 'Security Bundle', 'Retainer'];
+const PACKAGE_OPTIONS = ['Not sure', 'Breach Check', 'Persona Test Map', 'Playwright Suite', 'Security Bundle', 'Retainer'];
 const SLOT_OPTIONS = [
     'Mon 09:00–11:00 UK',
     'Tue 14:00–17:00 UK',

@@ -6,6 +6,7 @@ import ComparisonTable from "@/components/site/ComparisonTable";
 import RoiCalculator from "@/components/site/RoiCalculator";
 import RetainerValueSidebar from "@/components/site/RetainerValueSidebar";
 import FinalCTA from "@/components/site/FinalCTA";
+import BreachCheckCard from "@/components/site/BreachCheckCard";
 import { PACKAGES, RETAINER, FAQS } from "@/lib/content";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
@@ -15,12 +16,13 @@ export default function Pricing() {
       <PageHero
         label="Pricing"
         title="Fixed-price QA packages."
-        subhead="No hourly guessing. Pick a scope, book a call, get tests."
+        subhead="No hourly guessing. Start with a £395 Breach Check, or pick a bigger scope."
       />
 
       <Section>
         <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
           <div className="space-y-6">
+            <BreachCheckCard />
             <div className="grid gap-6 md:grid-cols-3">
               {PACKAGES.map((p) => (
                 <PackageCard key={p.slug} pkg={p} />

@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import PageHero from "@/components/site/PageHero";
 import { Section } from "@/components/site/Primitives";
 import LeadMagnet from "@/components/site/LeadMagnet";
@@ -10,7 +12,7 @@ export default function Blog() {
       <PageHero
         label="Blog"
         title="QA for builders."
-        subhead="Practical Playwright, persona-driven testing, and security automation."
+        subhead="Practical security checks for AI-built apps, and the Playwright tests that keep them fixed."
       />
 
       <Section>
@@ -22,9 +24,13 @@ export default function Blog() {
                   <span className="mono-label text-primary">{p.tag}</span>
                   <span className="mono-label text-muted-foreground">{p.read} read</span>
                 </div>
-                <h2 className="mt-3 text-xl font-semibold md:text-2xl">{p.title}</h2>
+                <h2 className="mt-3 text-xl font-semibold md:text-2xl">
+                  <Link to={`/blog/${p.slug}`} className="transition-colors hover:text-primary">{p.title}</Link>
+                </h2>
                 <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">{p.excerpt}</p>
-                <p className="mono-label mt-4 text-muted-foreground">Coming soon</p>
+                <Link to={`/blog/${p.slug}`} className="mono-label mt-4 inline-flex items-center gap-2 text-primary">
+                  Read the post <ArrowRight className="h-3 w-3" />
+                </Link>
               </article>
             ))}
           </div>

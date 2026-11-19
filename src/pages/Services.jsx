@@ -5,6 +5,7 @@ import { Section, SectionHead, Panel } from "@/components/site/Primitives";
 import PackageCard from "@/components/site/PackageCard";
 import ReportPreview from "@/components/site/ReportPreview";
 import FinalCTA from "@/components/site/FinalCTA";
+import BreachCheckCard from "@/components/site/BreachCheckCard";
 import { PACKAGES, RETAINER } from "@/lib/content";
 
 const WHY = [
@@ -19,13 +20,14 @@ export default function Services() {
     <div>
       <PageHero
         label="Services"
-        title="Services that turn users into tests."
-        subhead="We don't sell vague QA consulting. We deliver concrete, runnable Playwright test suites built around the people who actually use your product."
+        title="Find the holes. Fix them. Keep them fixed."
+        subhead="Security checks and Playwright test suites for SaaS teams, especially apps built quickly with AI tools. Fixed scope, fixed price, and you keep everything we build."
       />
 
       <Section>
-        <SectionHead label="Core services" title="Four ways to work together." />
-        <div className="mt-14 grid gap-6 md:grid-cols-3">
+        <SectionHead label="Core services" title="Five ways to work together." />
+        <BreachCheckCard className="mt-14" />
+        <div className="mt-6 grid gap-6 md:grid-cols-3">
           {PACKAGES.map((p) => (
             <PackageCard key={p.slug} pkg={p} />
           ))}
